@@ -1,7 +1,7 @@
 require "config"
 require "config.lazy"
 
---dev-note: where to put this?
+-- dev-note: where to put this?
 vim.api.nvim_create_user_command(
   "SetTab",
   function(opts)

@@ -2,7 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = { 'saghen/blink.cmp' },
-    --dev-note: not sure I will add this:
+    -- dev-note: not sure I will add this:
     --[[
     dependencies = {
       "folke/lazydev.nvim",
@@ -21,6 +21,8 @@ return {
       lspconfig.clangd.setup { capabilities = capabilities }
       lspconfig.lua_ls.setup { capabilities = capabilities }
       lspconfig.marksman.setup { capabilities = capabilities }
+      lspconfig.jsonls.setup {capabilities = capabilities }
+      lspconfig.yamlls.setup {capabilities = capabilities }
     end
   },
   {

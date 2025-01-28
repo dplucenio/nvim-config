@@ -11,6 +11,7 @@ local ensure_installed = {
   "sql",
   "vim",
   "vimdoc",
+  "yaml",
 }
 
 return {{
