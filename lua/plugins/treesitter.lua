@@ -9,6 +9,7 @@ local ensure_installed = {
   "markdown_inline",
   "query",
   "sql",
+  "terraform",
   "vim",
   "vimdoc",
   "yaml",
