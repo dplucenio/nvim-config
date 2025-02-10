@@ -31,7 +31,11 @@ return {{
         end,
         additional_vim_regex_highlighting = false,
       },
-      indent = { enable = true },
+      -- note that currently indentation is an experimental feature
+      indent = {
+        enable = true,
+        disable = { "markdown" }, -- leave markdown indentation to builtin vim and LS
+      },
     }
   end
 }}

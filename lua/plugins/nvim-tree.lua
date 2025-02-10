@@ -7,7 +7,8 @@ return {{
     require("nvim-tree").setup()
 
     -- Set nvim-tree related mappings
-    vim.keymap.set("n", "<leader>to", ":NvimTreeOpen<CR>")
-    vim.keymap.set("n", "<leader>tt", ":NvimTreeFindFile<CR>")
+    vim.keymap.set("n", "<leader>to", "<cmd>NvimTreeOpen<cr>")
+    vim.keymap.set("n", "<leader>tt", "<cmd>NvimTreeFindFile<cr>")
+    vim.keymap.set("n", "<leader>tg", "<cmd>NvimTreeToggle<cr>")
   end
 }}
