@@ -1,5 +1,5 @@
 return { {
   "dracula/vim",
   name = "dracula",
-  config = function() vim.cmd("colorscheme dracula") end
+  config = function() vim.cmd.colorscheme "dracula" end
 } }

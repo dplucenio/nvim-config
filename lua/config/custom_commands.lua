@@ -1,5 +1,5 @@
 vim.api.nvim_create_user_command(
-  "SetTab",
+  "Tab",
   function(opts)
     local size        = tonumber(opts.args)
     vim.o.tabstop     = size
@@ -8,3 +8,13 @@ vim.api.nvim_create_user_command(
   end,
   { nargs = 1, desc = "a" }
 )
+
+vim.api.nvim_create_user_command(
+  "Width",
+  function(opts)
+    vim.o.colorcolumn = opts.args
+    vim.o.textwidth   = tonumber(opts.args)
+  end,
+  { nargs = 1, desc = "a" }
+)
+

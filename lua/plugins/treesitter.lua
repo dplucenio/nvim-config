@@ -3,6 +3,7 @@ local ensure_installed = {
   "c",
   "html",
   "java",
+  "json",
   "kotlin",
   "lua",
   "markdown",
