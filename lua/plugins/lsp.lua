@@ -36,6 +36,7 @@ return {
       lspconfig.lua_ls.setup { capabilities = capabilities }
       lspconfig.jsonls.setup { capabilities = capabilities }
       lspconfig.yamlls.setup { capabilities = capabilities }
+      lspconfig.pylsp.setup { capabilities = capabilities }
       lspconfig.marksman.setup { capabilities = capabilities }
       lspconfig.terraformls.setup { capabilities = capabilities }
 
