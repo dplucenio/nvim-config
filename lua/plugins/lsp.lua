@@ -28,22 +28,34 @@ return {
       "folke/lazydev.nvim",
     },
     config = function()
-      local lspconfig = require("lspconfig")
+      -- Pull completion capabilities from blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-      -- language servers setup:
-      lspconfig.clangd.setup { capabilities = capabilities }
-      lspconfig.lua_ls.setup { capabilities = capabilities }
-      lspconfig.jsonls.setup { capabilities = capabilities }
-      lspconfig.yamlls.setup { capabilities = capabilities }
-      lspconfig.pylsp.setup { capabilities = capabilities }
-      lspconfig.marksman.setup { capabilities = capabilities }
-      lspconfig.terraformls.setup { capabilities = capabilities }
+      -- Define per-server options here (you can add cmd/root_dir/etc. as needed)
+      local servers = {
+        clangd        = {},   -- C/C++
+        lua_ls        = {},   -- Lua
+        jsonls        = {},   -- JSON
+        yamlls        = {},   -- YAML
+        pylsp         = {},   -- Python
+        marksman      = {},   -- Markdown
+        terraformls   = {},   -- Terraform
+        rust_analyzer = {},   -- Rust
+      }
 
-      -- additional configurations on `LspAttach`:
+      -- Register & enable each server using the 0.11 API
+      for name, cfg in pairs(servers) do
+        cfg.capabilities = capabilities
+        vim.lsp.config(name, cfg)   -- define/extend config
+        vim.lsp.enable(name)        -- auto-activate when matching filetypes/root
+      end
+
+      -- Extra buffer-local keymaps & behavior:
       lspattachconfig()
-    end
+    end,
   },
+
+  -- Completion
   {
     "saghen/blink.cmp",
     dependencies = "rafamadriz/friendly-snippets",

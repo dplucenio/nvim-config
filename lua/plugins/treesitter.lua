@@ -10,6 +10,8 @@ local ensure_installed = {
   "markdown",
   "markdown_inline",
   "query",
+  "rust",
+  "scala",
   "sql",
   "terraform",
   "vim",

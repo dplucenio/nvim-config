@@ -18,3 +18,11 @@ vim.api.nvim_create_user_command(
   { nargs = 1, desc = "a" }
 )
 
+
+vim.api.nvim_create_user_command(
+  "MarkdownHere",
+  function()
+    vim.bo.filetype = "markdown"
+  end,
+  { nargs = 0, desc = "Set filetype to markdown for current buffer" }
+)
