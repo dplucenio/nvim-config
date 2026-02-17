@@ -11,8 +11,8 @@ return {
       local telescope = require("telescope")
       local builtin = require("telescope.builtin")
 
-      telescope.load_extension("fzf")
-      telescope.load_extension("emoji")
+      pcall(telescope.load_extension, "fzf")
+      pcall(telescope.load_extension, "emoji")
 
       vim.keymap.set("n", "<leader>T", "<cmd>Telescope<cr>", { desc = "Telescope" })
       vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Telescope find files" })

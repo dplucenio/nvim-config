@@ -1,11 +1,25 @@
 -- This is where you enable features that only work if there is a language
 -- server active in the file
 local function lspattachconfig()
+  local group = vim.api.nvim_create_augroup("UserLspAttachActions", { clear = true })
   vim.api.nvim_create_autocmd("LspAttach", {
+    group = group,
     desc = "LSP actions",
     callback = function(event)
       local opts = { buffer = event.buf }
       vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
+      vim.keymap.set("n", "<leader>d", function()
+        vim.diagnostic.open_float(nil, {
+          focusable = true,
+          border = "rounded",
+        })
+      end, opts)
+      vim.keymap.set("n", "]w", function()
+        vim.diagnostic.goto_next({ severity = { min = vim.diagnostic.severity.WARN } })
+      end, opts)
+      vim.keymap.set("n", "[w", function()
+        vim.diagnostic.goto_prev({ severity = { min = vim.diagnostic.severity.WARN } })
+      end, opts)
       vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
       vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
       vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
@@ -28,6 +42,14 @@ return {
       "folke/lazydev.nvim",
     },
     config = function()
+      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+        vim.lsp.handlers.hover,
+        {
+          border = "rounded",
+          focusable = true,
+        }
+      )
+
       -- Pull completion capabilities from blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 

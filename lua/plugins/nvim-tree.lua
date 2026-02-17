@@ -1,9 +1,12 @@
 return {{
   "nvim-tree/nvim-tree.lua",
   dependencies = { "nvim-tree/nvim-web-devicons" },
-  config = function()
+  init = function()
+    -- Must be set before loading nvim-tree to avoid netrw conflicts.
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
+  end,
+  config = function()
     require("nvim-tree").setup()
 
     -- Set nvim-tree related mappings
