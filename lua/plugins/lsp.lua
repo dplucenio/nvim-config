@@ -6,6 +6,11 @@ local function lspattachconfig()
     group = group,
     desc = "LSP actions",
     callback = function(event)
+      local client = event.data and vim.lsp.get_client_by_id(event.data.client_id) or nil
+      if client then
+        vim.notify(("LSP attached: %s"):format(client.name), vim.log.levels.INFO)
+      end
+
       local opts = { buffer = event.buf }
       vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
       vim.keymap.set("n", "<leader>d", function()
@@ -55,21 +60,29 @@ return {
 
       -- Define per-server options here (you can add cmd/root_dir/etc. as needed)
       local servers = {
-        clangd        = {},   -- C/C++
-        lua_ls        = {},   -- Lua
-        jsonls        = {},   -- JSON
-        yamlls        = {},   -- YAML
-        pylsp         = {},   -- Python
-        marksman      = {},   -- Markdown
-        terraformls   = {},   -- Terraform
-        rust_analyzer = {},   -- Rust
+        clangd        = { enabled = true },   -- C/C++
+        lua_ls        = { enabled = true },   -- Lua
+        jsonls        = { enabled = true },   -- JSON
+        yamlls        = { enabled = true },   -- YAML
+        pylsp         = { enabled = true },   -- Python
+        marksman      = { enabled = true },   -- Markdown
+        terraformls   = { enabled = true },   -- Terraform
+        rust_analyzer = { enabled = true },   -- Rust
+        jdtls         = { enabled = true },   -- Java
+        kotlin_lsp    = {                     -- Kotlin
+          enabled = true,
+          cmd = { "kotlin-lsp", "--stdio" },
+        },
       }
 
       -- Register & enable each server using the 0.11 API
       for name, cfg in pairs(servers) do
+        -- Consume custom `enabled` entry in cfg table and remove it:
+        local enabled = cfg.enabled ~= false; cfg.enabled = nil
         cfg.capabilities = capabilities
-        vim.lsp.config(name, cfg)   -- define/extend config
-        vim.lsp.enable(name)        -- auto-activate when matching filetypes/root
+        vim.lsp.config(name, cfg)
+        -- Enabled only when enabled == true
+        if enabled then vim.lsp.enable(name) end
       end
 
       -- Extra buffer-local keymaps & behavior:
