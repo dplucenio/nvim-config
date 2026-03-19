@@ -12,7 +12,13 @@ local function lspattachconfig()
       end
 
       local opts = { buffer = event.buf }
-      vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", opts)
+      local has_telescope, telescope_builtin = pcall(require, "telescope.builtin")
+      vim.keymap.set("n", "K", function()
+        vim.lsp.buf.hover({
+          border = "rounded",
+          focusable = true,
+        })
+      end, opts)
       vim.keymap.set("n", "<leader>d", function()
         vim.diagnostic.open_float(nil, {
           focusable = true,
@@ -20,18 +26,30 @@ local function lspattachconfig()
         })
       end, opts)
       vim.keymap.set("n", "]w", function()
-        vim.diagnostic.goto_next({ severity = { min = vim.diagnostic.severity.WARN } })
+        vim.diagnostic.jump({ count = 1, severity = { min = vim.diagnostic.severity.WARN } })
       end, opts)
       vim.keymap.set("n", "[w", function()
-        vim.diagnostic.goto_prev({ severity = { min = vim.diagnostic.severity.WARN } })
+        vim.diagnostic.jump({ count = -1, severity = { min = vim.diagnostic.severity.WARN } })
       end, opts)
       vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", opts)
       vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", opts)
       vim.keymap.set("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<cr>", opts)
       vim.keymap.set("n", "go", "<cmd>lua vim.lsp.buf.type_definition()<cr>", opts)
-      -- `gr` can be set on telescope config (to use Telescope lsp_references)
-      vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-      vim.keymap.set("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<cr>", opts)
+      if has_telescope then
+        vim.keymap.set("n", "<leader>fs", telescope_builtin.lsp_document_symbols, opts)
+        vim.keymap.set("n", "<leader>fS", telescope_builtin.lsp_workspace_symbols, opts)
+      end
+      vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", opts)
+      -- Optional: use Telescope for references instead.
+      -- if has_telescope then
+      --   vim.keymap.set("n", "gr", telescope_builtin.lsp_references, opts)
+      -- end
+      vim.keymap.set("n", "gs", function()
+        vim.lsp.buf.signature_help({
+          border = "rounded",
+          focusable = true,
+        })
+      end, opts)
       vim.keymap.set("n", "<F2>", "<cmd>lua vim.lsp.buf.rename()<cr>", opts)
       vim.keymap.set({ "n", "x" }, "<F3>", "<cmd>lua vim.lsp.buf.format({async = true})<cr>", opts)
       vim.keymap.set("n", "<F4>", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
@@ -47,14 +65,6 @@ return {
       "folke/lazydev.nvim",
     },
     config = function()
-      vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-        vim.lsp.handlers.hover,
-        {
-          border = "rounded",
-          focusable = true,
-        }
-      )
-
       -- Pull completion capabilities from blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 

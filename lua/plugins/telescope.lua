@@ -10,6 +10,36 @@ return {
     config = function()
       local telescope = require("telescope")
       local builtin = require("telescope.builtin")
+      local layout = "horizontal" -- switch to "horizontal" if you want side-by-side again
+
+      telescope.setup({
+        defaults = {
+          layout_strategy = layout,
+          path_display = { "smart" }, -- options: "smart", "truncate", "tail", "shorten", "absolute"
+          layout_config = {
+            vertical = {
+              width = 0.95,
+              height = 0.95,
+              preview_height = 0.55,
+            },
+            horizontal = {
+              width = 0.95,
+              height = 0.95,
+              preview_width = 0.55,
+            },
+          },
+        },
+        pickers = {
+          lsp_document_symbols = {
+            show_line = false,
+            symbol_width = 60,
+          },
+          lsp_workspace_symbols = {
+            fname_width = 60,
+            symbol_width = 50,
+          },
+        },
+      })
 
       pcall(telescope.load_extension, "fzf")
       pcall(telescope.load_extension, "emoji")
@@ -27,8 +57,6 @@ return {
         "<cmd>Telescope live_grep vimgrep_arguments=rg,--color=never,--no-heading,--with-filename,--line-number,--column,--smart-case,--hidden<cr>",
         { desc = "Telescope live grep (including hidden)" })
       vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope buffers" })
-      -- Optionally set gr as Telescope lsp_references:
-      -- vim.keymap.set("n", "gr", "<cmd>Telescope lsp_references<cr>")
     end
   },
   { "xiyaowong/telescope-emoji.nvim" },
