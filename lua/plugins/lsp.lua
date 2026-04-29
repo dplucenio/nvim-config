@@ -71,14 +71,21 @@ return {
       -- Define per-server options here (you can add cmd/root_dir/etc. as needed)
       local servers = {
         clangd        = { enabled = true },   -- C/C++
+        gopls         = { enabled = true },   -- Go
         lua_ls        = { enabled = true },   -- Lua
-        jsonls        = { enabled = true },   -- JSON
+        jsonls        = {                     -- JSON
+          enabled = true,
+          cmd = { "vscode-json-language-server", "--stdio" },
+        },
         yamlls        = { enabled = true },   -- YAML
         pylsp         = { enabled = true },   -- Python
         marksman      = { enabled = true },   -- Markdown
         terraformls   = { enabled = true },   -- Terraform
         rust_analyzer = { enabled = true },   -- Rust
-        jdtls         = { enabled = true },   -- Java
+        vtsls         = {                     -- TypeScript / JavaScript
+          enabled = true,
+          cmd = { "vtsls", "--stdio" },
+        },
         kotlin_lsp    = {                     -- Kotlin
           enabled = true,
           cmd = { "kotlin-lsp", "--stdio" },
@@ -87,12 +94,13 @@ return {
 
       -- Register & enable each server using the 0.11 API
       for name, cfg in pairs(servers) do
-        -- Consume custom `enabled` entry in cfg table and remove it:
-        local enabled = cfg.enabled ~= false; cfg.enabled = nil
+        local enabled = cfg.enabled ~= false
+        cfg.enabled = nil
         cfg.capabilities = capabilities
         vim.lsp.config(name, cfg)
-        -- Enabled only when enabled == true
-        if enabled then vim.lsp.enable(name) end
+        if enabled then
+          vim.lsp.enable(name)
+        end
       end
 
       -- Extra buffer-local keymaps & behavior:
