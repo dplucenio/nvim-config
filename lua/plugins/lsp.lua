@@ -71,6 +71,7 @@ return {
       -- Define per-server options here (you can add cmd/root_dir/etc. as needed)
       local servers = {
         clangd        = { enabled = true },   -- C/C++
+        neocmake      = { enabled = true },   -- CMake
         gopls         = { enabled = true },   -- Go
         lua_ls        = { enabled = true },   -- Lua
         jsonls        = {                     -- JSON
