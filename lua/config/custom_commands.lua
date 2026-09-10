@@ -27,6 +27,17 @@ vim.api.nvim_create_user_command(
   { nargs = 0, desc = "Set filetype to markdown for current buffer" }
 )
 
+vim.api.nvim_create_user_command(
+  "MarkdownTable",
+  function(opts)
+    local ok, error_message = require("config.markdown_table").format_range(0, opts.line1, opts.line2)
+    if not ok then
+      vim.notify(error_message, vim.log.levels.ERROR)
+    end
+  end,
+  { range = true, desc = "Format a selected Markdown table" }
+)
+
 local function lsp_server_names()
   local seen = {}
   local names = {}

@@ -13,6 +13,7 @@ local ensure_installed = {
   "lua",
   "markdown",
   "markdown_inline",
+  "python",
   "query",
   "rust",
   "scala",
@@ -27,9 +28,16 @@ local ensure_installed = {
 
 return {{
   "nvim-treesitter/nvim-treesitter",
+  -- Preserve the legacy API/version from Git history; see README.md before upgrading.
+  branch = "master",
+  commit = "cf12346a3414fa1b06af75c79faebe7f76df080a",
+  lazy = false,
   build = ":TSUpdate",
   config = function()
     vim.treesitter.language.register("json", "jsonc")
+    vim.treesitter.language.register("kotlin", "simkit-data-type")
+    vim.treesitter.language.register("kotlin", "simkit-method")
+    vim.treesitter.language.register("kotlin", "simkit-workflow-type")
 
     require("nvim-treesitter.configs").setup {
       ensure_installed = ensure_installed,

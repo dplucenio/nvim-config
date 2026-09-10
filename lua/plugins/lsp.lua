@@ -68,6 +68,14 @@ return {
       -- Pull completion capabilities from blink.cmp
       local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+      vim.filetype.add({
+        pattern = {
+          [".*%.data%-type%.kts"] = "simkit-data-type",
+          [".*%.method%.kts"] = "simkit-method",
+          [".*%.workflow%-type%.kts"] = "simkit-workflow-type",
+        },
+      })
+
       -- Define per-server options here (you can add cmd/root_dir/etc. as needed)
       local servers = {
         clangd        = { enabled = true },   -- C/C++
@@ -81,7 +89,17 @@ return {
         yamlls        = { enabled = true },   -- YAML
         pylsp         = { enabled = true },   -- Python
         marksman      = { enabled = true },   -- Markdown
-        terraformls   = { enabled = true },   -- Terraform
+        terraformls   = {                     -- Terraform
+          enabled = true,
+          on_attach = function(_, bufnr)
+            if vim.lsp.codelens.enable then
+              vim.lsp.codelens.enable(true, { bufnr = bufnr })
+            else
+              -- Neovim 0.11 has refresh(), but not enable().
+              vim.lsp.codelens.refresh({ bufnr = bufnr })
+            end
+          end,
+        },
         rust_analyzer = { enabled = true },   -- Rust
         vtsls         = {                     -- TypeScript / JavaScript
           enabled = true,
@@ -90,6 +108,16 @@ return {
         kotlin_lsp    = {                     -- Kotlin
           enabled = true,
           cmd = { "kotlin-lsp", "--stdio" },
+        },
+        simkit_ide_lsp = {                    -- SimKit DSL scripts
+          enabled = true,
+          cmd = { "simkit", "lsp" },
+          filetypes = {
+            "simkit-data-type",
+            "simkit-method",
+            "simkit-workflow-type",
+          },
+          root_markers = { ".git" },
         },
       }
 
