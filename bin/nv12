@@ -1,0 +1,4 @@
+#!/bin/sh
+# Use the nv12 configuration, plugins, and state.
+export NVIM_APPNAME=nv12
+exec "$HOME/.local/opt/nvim-0.12.5/bin/nvim" "$@"
